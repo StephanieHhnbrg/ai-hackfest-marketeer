@@ -38,8 +38,7 @@ export class HttpService {
     let endpoint = environment.addEventEndpoint;
     return this.callGCloudRunPostRequest(endpoint, event).subscribe({
       next: (response: {campaigns: Campaign[]}) => {
-        console.log(response.campaigns);
-        event.campaign = event.campaign.concat(response.campaigns.map(c => `${c.name} ${c.variant}`))
+        event.campaigns = event.campaigns.concat(response.campaigns.map(c => `${c.name} ${c.variant}`))
         this.campaignsGenerated$.next(response.campaigns);
       },
       error: (err) => console.error('HTTP error:', err)

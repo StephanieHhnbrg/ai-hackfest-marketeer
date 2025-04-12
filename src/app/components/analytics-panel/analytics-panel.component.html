@@ -5,6 +5,9 @@
     </mat-expansion-panel-header>
 
     <div class="metrics">
+      <button mat-flat-button (click)="refresh()">
+        <mat-icon>refresh</mat-icon>Refresh</button>
+
       <p><mat-icon>web_traffic</mat-icon>&nbsp;{{metrics.clicks}} webpage calls</p>
       <p>&nbsp;</p>
       <p><mat-icon>outgoing_mail</mat-icon>&nbsp;{{metrics.mailsSent}} mails sent</p>

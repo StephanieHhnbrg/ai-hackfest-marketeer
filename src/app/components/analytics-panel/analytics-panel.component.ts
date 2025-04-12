@@ -4,10 +4,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {Subscription} from 'rxjs';
 import {HttpService} from '../../services/http.service';
 import {WebpageMetrics} from '../../data/metrics.data';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-analytics-panel',
-  imports: [MatExpansionModule, MatIconModule],
+  imports: [MatExpansionModule, MatIconModule, MatButtonModule],
   templateUrl: './analytics-panel.component.html',
   styleUrl: './analytics-panel.component.css'
 })
@@ -21,13 +22,16 @@ export class AnalyticsPanelComponent implements OnInit, OnDestroy {
   constructor(private httpService: HttpService) {}
 
   public ngOnInit() {
+    this.refresh();
+  }
+
+  public refresh() {
     this.subscriptions.push(this.httpService.getWebpageMetrics()
       .subscribe(metrics => {
         this.metrics = metrics;
-        this.conversionRate = metrics.clicks > 0 ? metrics.purchases / metrics.clicks : 0;
+        this.conversionRate = metrics.clicks > 0 ? metrics.purchases / metrics.clicks * 100 : 0;
       }));
   }
-
   public ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
   }

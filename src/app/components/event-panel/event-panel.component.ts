@@ -31,8 +31,9 @@ export class EventPanelComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subscriptions.push(this.httpService.getAllEvents()
-      .subscribe(events => {
+      .subscribe((events: SalesEvent[]) => {
         this.dataSource = events;
+        this.dataSource.sort((a, b) => { return new Date(a.date).getTime() - new Date(b.date).getTime(); });
       }));
   }
 
@@ -40,7 +41,7 @@ export class EventPanelComponent implements OnInit, OnDestroy {
     if (description.length == 0 || !this.isValidDate(date)) {
       return;
     }
-    let event = { description, date, campaign: [] };
+    let event = { description, date, campaigns: [] };
     this.dataSource.push(event);
     this.httpService.registerEvent(event);
     this.table!.renderRows();

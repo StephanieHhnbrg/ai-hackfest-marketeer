@@ -18,8 +18,23 @@ def fetch_data():
   result = []
   for doc in docs:
     data = doc.to_dict()
+    campaign_ids = data.get('campaigns', [])
+    campaign_names = [fetch_campaign_name(campaign_id) for campaign_id in campaign_ids]
+    data['campaigns'] = campaign_names
     result.append(data)
   return result
+
+def fetch_campaign_name(id):
+  db = firestore.Client(database='marketing-campaign')
+  docs_ref = db.collection('marketing-campaign')
+  doc = docs_ref.document(id).get()
+
+  if doc.exists:
+    data = doc.to_dict()
+    return f"{data.get('name')}_{data.get('variant')}"
+  else:
+    return 'Campaign not found'
+
 
 def handle_cors():
   response = make_response()
