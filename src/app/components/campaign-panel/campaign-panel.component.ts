@@ -12,7 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-campaign-panel',
-  imports: [CommonModule, MatExpansionModule, MatIconModule, MatTableModule, MatButtonModule, MailViewerDialogComponent],
+  imports: [CommonModule, MatExpansionModule, MatIconModule, MatTableModule, MatButtonModule],
   templateUrl: './campaign-panel.component.html',
   styleUrl: './campaign-panel.component.css'
 })

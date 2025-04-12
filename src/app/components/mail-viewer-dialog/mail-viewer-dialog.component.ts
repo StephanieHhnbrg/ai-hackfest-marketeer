@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialogActions, MatDialogClose,
   MatDialogContent,
   MatDialogTitle
 } from '@angular/material/dialog';
@@ -14,9 +13,7 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
   imports: [
     MatButtonModule,
     MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,],
+    MatDialogContent],
   templateUrl: './mail-viewer-dialog.component.html',
   styleUrl: './mail-viewer-dialog.component.css'
 })

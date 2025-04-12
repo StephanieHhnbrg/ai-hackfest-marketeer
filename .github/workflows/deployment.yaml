@@ -28,13 +28,10 @@ jobs:
         run: |
           rm -r ./docs
           npm run build-prod
+
           cp -r "./dist/ai-hackfest-marketeer/browser/" "./docs"
           cp "./dist/ai-hackfest-marketeer/prerendered-routes.json" "./docs"
           cp "./dist/ai-hackfest-marketeer/3rdpartylicenses.txt" "./docs"
-          sed -i 's/polyfills/docs\/polyfills/g' ./docs/index.html
-          sed -i 's/main-/docs\/main-/g' ./docs/index.html
-          sed -i 's/favicon/docs\/favicon/g' ./docs/index.html
-          sed -i 's/styles-/docs\/styles-/g' ./docs/index.html
           cp "./docs/index.html" "./docs/404.html"
 
       - name: 🎉 Commit & Push
