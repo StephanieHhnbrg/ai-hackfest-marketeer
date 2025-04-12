@@ -1,0 +1,20 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title><mat-icon>analytics</mat-icon>&nbsp;Analytics </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="metrics">
+      <p><mat-icon>web_traffic</mat-icon>&nbsp;{{metrics.clicks}} webpage calls</p>
+      <p>&nbsp;</p>
+      <p><mat-icon>outgoing_mail</mat-icon>&nbsp;{{metrics.mailsSent}} mails sent</p>
+      <p><mat-icon>mark_email_read</mat-icon>&nbsp;{{metrics.openedMails}} mails opened</p>
+      <p><mat-icon>ads_click</mat-icon>&nbsp;{{metrics.clickedMails}} webpage calls by mails</p>
+      <p>&nbsp;</p>
+      <p><mat-icon>shopping_bag_speed</mat-icon>&nbsp;{{metrics.purchases}} purchases</p>
+      <p><mat-icon>schedule</mat-icon>&nbsp;{{metrics.avgPurchaseTime}} ms avg time till purchase</p>
+      <p><mat-icon>percent</mat-icon>&nbsp;{{conversionRate}} conversation rate</p>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>

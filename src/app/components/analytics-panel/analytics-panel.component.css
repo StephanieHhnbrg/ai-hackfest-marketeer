@@ -1,0 +1,8 @@
+.metrics {
+  padding-left: 20px;
+}
+
+.metrics p {
+  display : flex;
+  align-items : center;
+}
