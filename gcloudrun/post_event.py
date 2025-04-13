@@ -15,7 +15,7 @@ load_dotenv()
 @functions_framework.http
 def post_event(request):
   if request.method == 'OPTIONS':
-    return handle_cors()
+    return handle_cors(request)
 
   event = request.get_json()
   campaigns = create_campaigns(event)
@@ -24,7 +24,7 @@ def post_event(request):
   for c in campaigns:
     send_emails(c)
     c['recipients'] = len(c['recipients'])
-  return create_response({ 'campaigns': campaigns})
+  return create_response({ 'campaigns': campaigns}, request)
 
 
 def add_event(event_data, campaigns):
@@ -177,20 +177,22 @@ ALLOWED_ORIGINS = [
 ]
 
 
-def handle_cors():
+def handle_cors(request):
   response = make_response()
   response.status_code = 204
-  for origin in ALLOWED_ORIGINS:
+  origin = request.headers.get('Origin')
+  if origin in ALLOWED_ORIGINS:
     response.headers['Access-Control-Allow-Origin'] = origin
   response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
   response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
   return response
 
 
-def create_response(data):
+def create_response(data, request):
   response = make_response(jsonify(data))
   response.status_code = 200
-  for origin in ALLOWED_ORIGINS:
+  origin = request.headers.get('Origin')
+  if origin in ALLOWED_ORIGINS:
     response.headers['Access-Control-Allow-Origin'] = origin
   return response
 
