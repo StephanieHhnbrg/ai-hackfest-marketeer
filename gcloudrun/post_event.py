@@ -117,7 +117,7 @@ def split_users():
     mails.append({"mail": data.get("mail"), "name": data.get("name")})
   random.shuffle(mails)
 
-  mid = len(mails)
+  mid = len(mails) // 2
   group_a = mails[:mid]
   group_b = mails[mid:]
 
@@ -128,37 +128,35 @@ def send_emails(campaign):
   from_mail = os.environ.get("SENDER_MAIL")
   from_password = os.environ.get("SENDER_MAIL_PW")
 
-  msg = MIMEMultipart()
-  msg['From'] = from_mail
-  msg['Subject'] = campaign['subjectLine']
-  html_body = f"""
-  <html>
-    <body>
-      <div>{campaign['content']}</div>
-      <img src="https://track-pixel-mwc2mmip4a-ey.a.run.app?user_id=<USER-ID>&campaign_id={campaign['id']}" width="1" height="1" style="display:none;" />
-    </body>
-  </html>
-  """
-  link = f"https://stephaniehhnbrg.github.io/ai-hackfest-webstore/?utm_campaign={campaign['id']}&utm_user_id=<USER-ID>"
-  html_body = html_body.replace("https://stephaniehhnbrg.github.io/ai-hackfest-webstore/", link)
-  msg.attach(MIMEText(html_body, 'html'))
+  for user_data in campaign['recipients']:
+    msg = MIMEMultipart()
+    msg['From'] = from_mail
+    msg['Subject'] = campaign['subjectLine']
+    html_body = f"""
+    <html>
+        <body>
+        <div>{campaign['content']}</div>
+        <img src="https://track-pixel-mwc2mmip4a-ey.a.run.app?user_id=<USER-ID>&campaign_id={campaign['id']}" width="1" height="1" style="display:none;" />
+        </body>
+    </html>
+    """
+    link = f"http://localhost:4200/?utm_campaign={campaign['id']}&utm_user_id={user_data['mail']}"
+    html_body = html_body.replace("http://localhost:4200/", link).replace("<USER-NAME>", user_data['name']).replace("<USER-ID>", user_data['mail'])
+    msg.attach(MIMEText(html_body, 'html'))
 
-  try:
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(from_mail, from_password)
+    try:
+      server = smtplib.SMTP('smtp.gmail.com', 587)
+      server.starttls()
+      server.login(from_mail, from_password)
 
-    for user_data in campaign['recipients']:
       msg['To'] = user_data['mail']
-      mail_body = msg.as_string().replace("<USER-NAME>", user_data['name']).replace("<USER-ID>", user_data['mail'])
-      server.sendmail(from_mail, user_data['mail'], mail_body)
+      server.sendmail(from_mail, user_data['mail'], msg.as_string())
       update_tracking_db(user_data['mail'], campaign['id'])
+    except Exception as e:
+      print(f"Error: {e}")
 
-  except Exception as e:
-    print(f"Error: {e}")
-
-  finally:
-    server.quit()
+    finally:
+      server.quit()
 
 
 def update_tracking_db(user_id, campaign_id):
