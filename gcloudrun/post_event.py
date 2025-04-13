@@ -71,7 +71,7 @@ def call_gemini(event):
     Requirements:
     - The user should be addressed as <USER-NAME> (this placeholder will be replaced dynamically). Do not use any other placeholders.
     - Start each email with an <h2> headline that captures attention.
-    - Include the following call-to-action link embedded in a HTML button or styled link tag: http://localhost:4200/
+    - Include the following call-to-action link embedded in a HTML button or styled link tag: https://stephaniehhnbrg.github.io/ai-hackfest-webstore/
     - The tone should be exciting, friendly, and persuasive, encouraging the user to engage or make a purchase.
 
     Output format:
@@ -139,8 +139,8 @@ def send_emails(campaign):
     </body>
   </html>
   """
-  link = f"http://localhost:4200/?utm_campaign={campaign['id']}&utm_user_id=<USER-ID>"
-  html_body = html_body.replace("http://localhost:4200/", link)
+  link = f"https://stephaniehhnbrg.github.io/ai-hackfest-webstore/?utm_campaign={campaign['id']}&utm_user_id=<USER-ID>"
+  html_body = html_body.replace("https://stephaniehhnbrg.github.io/ai-hackfest-webstore/", link)
   msg.attach(MIMEText(html_body, 'html'))
 
   try:
@@ -171,10 +171,17 @@ def update_tracking_db(user_id, campaign_id):
   })
 
 
+ALLOWED_ORIGINS = [
+  'http://localhost:4200',
+  'https://stephaniehhnbrg.github.io'
+]
+
+
 def handle_cors():
   response = make_response()
   response.status_code = 204
-  response.headers['Access-Control-Allow-Origin'] = 'http://localhost:4200'
+  for origin in ALLOWED_ORIGINS:
+    response.headers['Access-Control-Allow-Origin'] = origin
   response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
   response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
   return response
@@ -183,5 +190,7 @@ def handle_cors():
 def create_response(data):
   response = make_response(jsonify(data))
   response.status_code = 200
-  response.headers['Access-Control-Allow-Origin'] = 'http://localhost:4200'
+  for origin in ALLOWED_ORIGINS:
+    response.headers['Access-Control-Allow-Origin'] = origin
   return response
+
